@@ -1,0 +1,12 @@
+Part C — End-to-End Integration Demo Recording
+
+Screen recording demo showing:
+1. Opening the Part C form in browser.
+2. Filling in candidate details (Postgraduate / PhD / Undergraduate).
+3. Submitting the form with active loading spinner state on the submit button.
+4. Sending the JSON payload via fetch() to the N8N B1 Webhook URL (http://localhost:5678/webhook-test/student-lead).
+5. N8N Webhook receiving the payload in real-time and branching conditionally (Email notification vs No-Op).
+6. Success confirmation card without page reload.
+
+Demo Video (Google Drive Link):
+https://drive.google.com/file/d/1c_MdtwgATdKU692XDhfbOAQeQhMVeTln/view?usp=sharing

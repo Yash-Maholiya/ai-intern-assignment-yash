@@ -22,7 +22,7 @@ ai-intern-assignment-yash/
 │   ├── workflow-b2-scheduled-fetch.json
 │   ├── screenshot-b1.png
 │   └── screenshot-b2.png
-├── part-c/                                     # End-to-End Webhook Integration (Upcoming)
+├── part-c/                                     # End-to-End Webhook Integration
 │   ├── index.html
 │   └── demo.gif / loom-link.txt
 └── README.md                                   # Comprehensive documentation & setup guide
@@ -201,8 +201,46 @@ Schedule Trigger (Daily at 9:00 AM) → HTTP Request (Open-Meteo) → Code in Ja
 
 ---
 
-## Part C — Integration Challenge *(Upcoming)*
-*Documentation for end-to-end webhook integration, submit button loading states, and error handling will be added upon implementation in Part C.*
+## Part C — Integration Challenge *(Completed)*
+
+### Overview
+Part C completes the full end-to-end integration by connecting the responsive student lead capture form directly to the **N8N Lead Notification Webhook (B1)** using asynchronous JavaScript `fetch()`.
+
+- **Interactive Form File**: [`part-c/index.html`](part-c/index.html)
+- **Demo / Recording Link**: [`part-c/loom-link.txt`](part-c/loom-link.txt) *(Contains Google Drive demo recording link)*
+
+### Key Features
+1. **Seamless Background Webhook Dispatch**:
+   - Maintains a clean, natural admissions form experience for the student without exposing technical webhook URLs or internal configuration.
+   - Automatically dispatches form data as JSON (`Content-Type: application/json`) to the N8N B1 webhook (`http://localhost:5678/webhook-test/student-lead` with fallback to `http://localhost:5678/webhook/student-lead`) via `fetch()`.
+2. **Submit Button Loading State**:
+   - When the applicant clicks **Submit Application**, the button seamlessly transitions into a loading state:
+     - Disables button interaction (`disabled = true`) to prevent accidental duplicate submissions.
+     - Text updates to *"Submitting Application..."*.
+     - Renders an animated CSS circular spinner.
+3. **Graceful Error & Success Handling**:
+   - **Network/Server Errors**: Caught inside a `try...catch` block. Displays an inline alert banner with clear messaging if the service is temporarily unreachable, and re-enables the submit button automatically so entered data is preserved.
+   - **Successful Delivery (HTTP 200)**: Displays the personalized Thank-You card with submitted details without reloading the page, and cleanly logs the webhook response to the browser console.
+4. **Form Reset**:
+   - "Submit Another Application" button resets all inputs, live character counter, radio indicators, and error states.
+
+### How to Run and Test Part C
+1. Ensure your N8N instance is running (e.g. in Docker at `http://localhost:5678`).
+2. Open the **Lead Notification Workflow (B1)** in N8N and click **Listen for test event** on the Webhook node.
+3. Open [`part-c/index.html`](part-c/index.html) in your browser:
+   - Either open directly as a local file or run:
+     ```bash
+     python3 -m http.server 3000
+     ```
+     and visit [http://localhost:3000/part-c/](http://localhost:3000/part-c/).
+4. Fill out the form fields with valid test data (select *Postgraduate* to test email delivery, or *Undergraduate* to test the mock path).
+5. Click **Submit Application**:
+   - Observe the button loading spinner and disabled state.
+   - Observe the N8N webhook trigger receiving the data in real-time.
+   - Observe the Thank-You confirmation card rendering without page reload.
+6. **Negative / Error Test**:
+   - Pause N8N or disconnect the network.
+   - Click submit and verify the inline alert banner displays gracefully without crashing, restoring the button state.
 
 ---
 
@@ -226,3 +264,11 @@ Schedule Trigger (Daily at 9:00 AM) → HTTP Request (Open-Meteo) → Code in Ja
 3. **Validating Scheduled Triggers Without Awaiting Cron**:  
    *Challenge*: Verifying the end-to-end HTTP Request and JavaScript transformation logic without waiting for the 9:00 AM daily trigger.  
    *Resolution*: Utilized N8N's manual workflow canvas execution to test and validate node-to-node data flow immediately with live API responses.
+
+### Part C — Integration & UX
+1. **Asynchronous Webhook Error Resilience**:  
+   *Challenge*: If the N8N Docker container is paused or the test webhook is not actively listening, standard `fetch()` throws an error, which could leave the user stranded on a disabled button.  
+   *Resolution*: Implemented full `try...catch...finally` lifecycle management. On failure, the submit button is restored from its loading state, and an accessible alert banner is dynamically presented at the top of the form with actionable guidance.
+2. **Clean User Experience vs Developer Tools**:  
+   *Challenge*: Providing seamless webhook integration without cluttering the applicant-facing UI with internal webhook URLs or technical jargon.  
+   *Resolution*: Kept the front-end interface clean and standard for the applicant (standard "Submit Application" button and thank-you messaging) while seamlessly handling the background `fetch()` dispatch and dual-mode webhook fallback in JavaScript.
