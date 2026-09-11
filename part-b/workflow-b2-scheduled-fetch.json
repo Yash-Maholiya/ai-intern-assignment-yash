@@ -1,0 +1,151 @@
+{
+  "name": "Scheduled Data Fetch Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7a8c6c03-cba0-423b-90b6-3ef6b872d176",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current=temperature_2m,relative_humidity_2m,weather_code",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "2ef6842d-0e0b-437b-abae-4183df8214aa",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn [\n  {\n    json: {\n      location: \"New Delhi\",\n      temperature: data.current.temperature_2m,\n      humidity: data.current.relative_humidity_2m,\n      weatherCode: data.current.weather_code,\n      recordedAt: data.current.time\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "70f0869e-6b91-4282-ad33-c250194ff970",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4822f1db-a000-44bb-bab9-008fd5be906d",
+              "name": "Location",
+              "value": "={{$json.location}}",
+              "type": "string"
+            },
+            {
+              "id": "3204d1a3-8381-4589-9bc1-25be7b3d7de3",
+              "name": "Temperature (°C)",
+              "value": "={{$json.temperature}}",
+              "type": "number"
+            },
+            {
+              "id": "076d4663-c076-4ca8-978f-8c4b8a154854",
+              "name": "Humidity (%)",
+              "value": "={{$json.humidity}}",
+              "type": "number"
+            },
+            {
+              "id": "c4b50418-734b-46d3-bd0b-ebbbd3493e74",
+              "name": "Weather Code",
+              "value": "={{$json.weatherCode}}",
+              "type": "number"
+            },
+            {
+              "id": "a94a5ae6-6cea-45e2-8b97-9c315f1b72c2",
+              "name": "Recorded At",
+              "value": "={{$json.recordedAt}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "50b4ac95-af52-481c-b526-1fb68c293097",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "98926974-4b01-4bc2-8b89-c1e0ed4aafe6",
+  "meta": {
+    "instanceId": "eedb766fe6b663898e9d926eb039bb2a4c91690e9b8f133c28329f912f6204e7"
+  },
+  "nodeGroups": [],
+  "id": "iCoQh39bVBJO7PtS",
+  "tags": []
+}

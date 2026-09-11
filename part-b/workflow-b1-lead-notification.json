@@ -1,0 +1,236 @@
+{
+  "name": "Lead Notification Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "student-lead",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "82c551fe-9969-4f80-bd09-94ef9a39faa5",
+      "name": "Webhook",
+      "webhookId": "91a8a3e8-7c02-4929-9449-047456bd99b7"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "671cf16d-0213-4586-b41d-4787568cf300",
+              "leftValue": "={{$json.courseLevel}}",
+              "rightValue": "Postgraduate (PG)",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "7c6eacbf-8e29-4721-b366-bd4a5351745a",
+              "leftValue": "={{$json.courseLevel}}",
+              "rightValue": "Doctorate (PhD)",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "2363345c-ed56-4ef4-8b0d-5511baf64b8c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "fromEmail": "=ch.yash8434@gmail.com",
+        "toEmail": "=team@gmail.com",
+        "subject": "New Postgraduate/PhD Student Lead",
+        "html": "=New high-priority student lead received.\n\nName: {{$json.name}}\nEmail: {{$json.email}}\nCountry: {{$json.country}}\nCourse Level: {{$json.courseLevel}}\nPreferred University: {{$json.preferredUniversity}}\n\nMessage:\n{{$json.message}}\n\nSubmitted At:\n{{$json.submittedAt}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        704,
+        -144
+      ],
+      "id": "8d2917d0-3473-438d-8fb1-293a496c2bbd",
+      "name": "Send an Email",
+      "webhookId": "3078b740-f9de-462e-9918-122bb33caf97",
+      "credentials": {
+        "smtp": {
+          "id": "m2lty3eJ2KsZNL3s",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "692da145-c51b-4ef2-8195-6be28382a065",
+              "name": "name",
+              "value": "={{$json.body.fullName}}",
+              "type": "string"
+            },
+            {
+              "id": "8e39b095-b23f-4fe7-9e9d-f3e9523349e3",
+              "name": "email",
+              "value": "={{$json.body.email}}",
+              "type": "string"
+            },
+            {
+              "id": "c995c1a6-8205-4b32-9fc9-df4f6639cc5b",
+              "name": "courseLevel",
+              "value": "={{$json.body.courseLevel}}",
+              "type": "string"
+            },
+            {
+              "id": "1b63aa70-0dd3-4b81-a67c-61bedc45199f",
+              "name": "message",
+              "value": "={{$json.body.message}}",
+              "type": "string"
+            },
+            {
+              "id": "25fc08ab-7a7f-4b85-b3dc-f532b0a81b1c",
+              "name": "submittedAt",
+              "value": "={{$json.body.submittedAt}}",
+              "type": "string"
+            },
+            {
+              "id": "c91900aa-9640-46d5-9710-73efa4282e8f",
+              "name": "country",
+              "value": "={{$json.body.country}}",
+              "type": "string"
+            },
+            {
+              "id": "e911f40d-a103-4eb3-88f3-fe9f7fa1e43f",
+              "name": "preferredUniversity",
+              "value": "={{$json.body.preferredUniversity}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "07cc9657-7137-48e8-873b-6b50b3add10c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        704,
+        96
+      ],
+      "id": "d2ee2458-7b3c-4f87-ad25-830a0600d63d",
+      "name": "No Operation, do nothing"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "body": {
+            "fullName": "Yash Kumar",
+            "email": "yash@example.com",
+            "country": "India",
+            "courseLevel": "Postgraduate (PG)",
+            "preferredUniversity": "University of Toronto",
+            "message": "I am interested in pursuing a master's degree.",
+            "submittedAt": "2026-09-12T01:30:00.000Z"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Kolkata",
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "4856dc75-acdd-4a46-9ff6-e0c4a2f0ab8e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "eedb766fe6b663898e9d926eb039bb2a4c91690e9b8f133c28329f912f6204e7"
+  },
+  "nodeGroups": [],
+  "id": "t0VIqct5cipJKzDH",
+  "tags": []
+}

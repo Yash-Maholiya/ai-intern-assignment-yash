@@ -17,7 +17,7 @@ This repository contains the complete practical technical assessment for the **A
 ai-intern-assignment-yash/
 ├── part-a/
 │   └── index.html                              # Pure HTML + CSS + Vanilla JS Student Lead Capture Form
-├── part-b/                                     # N8N Automation Workflows (Upcoming)
+├── part-b/                                     # N8N Automation Workflows
 │   ├── workflow-b1-lead-notification.json
 │   ├── workflow-b2-scheduled-fetch.json
 │   ├── screenshot-b1.png
@@ -68,8 +68,136 @@ ai-intern-assignment-yash/
 
 ---
 
-## Part B — N8N Automation Workflows *(In Progress)*
-*Documentation for B1 (Lead Notification Workflow) and B2 (Scheduled Data Fetch Workflow) will be added upon implementation in Part B.*
+## Part B — N8N Automation Workflows *(Completed)*
+
+### PART B1 — Lead Notification Workflow
+
+- **Workflow File**: [`part-b/workflow-b1-lead-notification.json`](part-b/workflow-b1-lead-notification.json)
+- **Canvas Screenshot**: [`part-b/screenshot-b1.png`](part-b/screenshot-b1.png)
+
+![Workflow B1 Canvas](part-b/screenshot-b1.png)
+
+#### Architecture & Data Flow
+```text
+Webhook (POST) → Edit Fields → IF (Course Level Check)
+                                  ├── [TRUE]  → Send an Email (Postgraduate / PhD Notification)
+                                  └── [FALSE] → No Operation, do nothing (Undergraduate Mock Path)
+```
+
+#### Node Details
+1. **Webhook Node**:
+   - **HTTP Method**: `POST`
+   - **Path**: `student-lead`
+   - **Test Webhook URL**: `http://localhost:5678/webhook-test/student-lead`
+   - **Production Webhook URL**: `http://localhost:5678/webhook/student-lead`
+   - **Payload Received**: Accepts JSON form submissions containing:
+     - `fullName`
+     - `email`
+     - `country`
+     - `courseLevel`
+     - `preferredUniversity`
+     - `message`
+     - `submittedAt`
+2. **Edit Fields Node**:
+   - Extracts incoming data from `$json.body` and standardizes/renames keys:
+     - `name` $\leftarrow$ `{{$json.body.fullName}}`
+     - `email` $\leftarrow$ `{{$json.body.email}}`
+     - `country` $\leftarrow$ `{{$json.body.country}}`
+     - `courseLevel` $\leftarrow$ `{{$json.body.courseLevel}}`
+     - `preferredUniversity` $\leftarrow$ `{{$json.body.preferredUniversity}}`
+     - `message` $\leftarrow$ `{{$json.body.message}}`
+     - `submittedAt` $\leftarrow$ `{{$json.body.submittedAt}}`
+3. **IF Node (Conditional Branching)**:
+   - Evaluates whether `courseLevel` equals:
+     - `"Postgraduate (PG)"` **OR**
+     - `"Doctorate (PhD)"`
+4. **Send an Email Node (TRUE Branch)**:
+   - Triggered for high-intent Postgraduate and PhD leads.
+   - Dispatches a formatted notification email summarizing the applicant's profile and inquiry.
+   - *Security & Credential Configuration*: Configured for SMTP / Gmail. All passwords, App Passwords, and private credential secrets are omitted from this repository. When importing the workflow into N8N, users must configure their own SMTP account credentials in N8N and set appropriate `fromEmail` and `toEmail` values.
+5. **No Operation, do nothing (FALSE Branch)**:
+   - Acts as the mock sink for Undergraduate (UG) applications, completing the execution path cleanly.
+
+#### How to Run and Test B1
+1. In your N8N instance, import [`part-b/workflow-b1-lead-notification.json`](part-b/workflow-b1-lead-notification.json) via the workflow editor.
+2. In the **Send an Email** node, select or add your SMTP/Gmail credentials and set your desired recipient email.
+3. Click **Listen for test event** on the Webhook node (or activate the workflow).
+4. Send test POST requests using `curl`:
+   - **Test Case 1: Postgraduate Lead (Routes to Email Notification)**
+     ```bash
+     curl -X POST http://localhost:5678/webhook-test/student-lead \
+       -H "Content-Type: application/json" \
+       -d '{
+         "fullName": "Jane Doe",
+         "email": "jane.doe@example.com",
+         "country": "Canada",
+         "courseLevel": "Postgraduate (PG)",
+         "preferredUniversity": "University of Toronto",
+         "message": "Interested in Master in Computer Science.",
+         "submittedAt": "2026-09-12T01:30:00.000Z"
+       }'
+     ```
+   - **Test Case 2: Undergraduate Lead (Routes to No Operation Mock)**
+     ```bash
+     curl -X POST http://localhost:5678/webhook-test/student-lead \
+       -H "Content-Type: application/json" \
+       -d '{
+         "fullName": "John Smith",
+         "email": "john.smith@example.com",
+         "country": "India",
+         "courseLevel": "Undergraduate (UG)",
+         "preferredUniversity": "IIT Delhi",
+         "message": "Inquiring about undergraduate admissions.",
+         "submittedAt": "2026-09-12T01:30:00.000Z"
+       }'
+     ```
+5. In N8N, verify the execution log: Case 1 succeeds through the Email node; Case 2 routes to the No Operation node.
+
+---
+
+### PART B2 — Scheduled Data Fetch Workflow
+
+- **Workflow File**: [`part-b/workflow-b2-scheduled-fetch.json`](part-b/workflow-b2-scheduled-fetch.json)
+- **Canvas Screenshot**: [`part-b/screenshot-b2.png`](part-b/screenshot-b2.png)
+
+![Workflow B2 Canvas](part-b/screenshot-b2.png)
+
+#### Architecture & Data Flow
+```text
+Schedule Trigger (Daily at 9:00 AM) → HTTP Request (Open-Meteo) → Code in JavaScript → Edit Fields
+```
+
+#### Node Details
+1. **Schedule Trigger Node**:
+   - Configured to trigger automatically once every day at 9:00 AM (`triggerAtHour: 9`).
+2. **HTTP Request Node**:
+   - **Target API**: Open-Meteo Public Weather API
+   - **URL**: `https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current=temperature_2m,relative_humidity_2m,weather_code`
+   - **Method**: `GET`
+   - **Authentication**: None (no API key required).
+   - **Why Open-Meteo was Selected**:
+     - Free and open public API with zero API key or sign-up hurdles.
+     - Fast, reliable, and provides clean JSON structure for automated scheduled pipelines.
+3. **Code in JavaScript Node**:
+   - Extracts nested data from `$input.first().json.current` and reshapes it into clean properties:
+     - `location` ("New Delhi")
+     - `temperature` (`temperature_2m`)
+     - `humidity` (`relative_humidity_2m`)
+     - `weatherCode` (`weather_code`)
+     - `recordedAt` (`time`)
+4. **Edit Fields Node**:
+   - Standardizes the transformed properties into human-readable, labelled output fields:
+     - `Location` (String)
+     - `Temperature (°C)` (Number)
+     - `Humidity (%)` (Number)
+     - `Weather Code` (Number)
+     - `Recorded At` (String)
+
+#### How to Run and Test B2
+1. Import [`part-b/workflow-b2-scheduled-fetch.json`](part-b/workflow-b2-scheduled-fetch.json) into N8N.
+2. Even though the workflow is configured on a daily schedule (9:00 AM), it was manually tested and executed successfully on the canvas.
+3. Click **Execute workflow** or **Test step** to run it on-demand.
+4. Review the final node output to verify the 5 clean, labelled fields.
 
 ---
 
@@ -78,10 +206,23 @@ ai-intern-assignment-yash/
 
 ---
 
-## Challenges Faced & Resolutions (Part A)
+## Challenges Faced & Resolutions
+
+### Part A — Form Engineering
 1. **Mobile Layout for Degree Radio Cards**:  
    *Challenge*: On narrow mobile screens, having 3 horizontal square cards caused awkward stacking and empty whitespace on the right.  
    *Resolution*: Implemented a responsive hybrid design using CSS media queries. On desktop viewports, options display as 3 sleek horizontal cards in a row. On screens $\le 580\text{px}$, they dynamically transform into full-width interactive selection rows with animated radio indicators and descriptions.
 2. **Framework-Free Live Validation & State Management**:  
    *Challenge*: Providing instant feedback without triggering premature error messages before initial user submission.  
    *Resolution*: Applied a two-tier validation lifecycle in vanilla JavaScript—validating completely on submit while attaching lightweight input listeners to clear errors in real-time as users correct their entries.
+
+### Part B — N8N Workflows
+1. **Webhook Payload Extraction**:  
+   *Challenge*: Inbound form JSON payloads arrive nested within `$json.body`, which can cause missing property errors in subsequent logic if referenced directly.  
+   *Resolution*: Introduced a dedicated **Edit Fields** node right after the Webhook node to extract and map `$json.body.*` into clean root-level attributes (`name`, `email`, `courseLevel`, etc.), ensuring robust conditional evaluation in downstream nodes.
+2. **Secure Credential Separation**:  
+   *Challenge*: Exporting the B1 workflow for GitHub without exposing SMTP passwords or private account credentials.  
+   *Resolution*: Ensured sensitive authentication details and App Passwords are removed from exported workflow JSON files and documented clear instructions for connecting local SMTP credentials on import.
+3. **Validating Scheduled Triggers Without Awaiting Cron**:  
+   *Challenge*: Verifying the end-to-end HTTP Request and JavaScript transformation logic without waiting for the 9:00 AM daily trigger.  
+   *Resolution*: Utilized N8N's manual workflow canvas execution to test and validate node-to-node data flow immediately with live API responses.
