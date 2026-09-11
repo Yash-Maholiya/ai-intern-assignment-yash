@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Lead Capture Form | International Admissions</title>
+  <meta name="description" content="Submit your details to explore undergraduate, postgraduate, and doctoral degree opportunities with top global universities.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-glow: rgba(79, 70, 229, 0.25);
+      --surface: #ffffff;
+      --surface-subtle: #f8fafc;
+      --border: #e2e8f0;
+      --border-focus: #6366f1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --warning: #f59e0b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-card: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 10px 20px -5px rgba(15, 23, 42, 0.04);
+      --shadow-input-focus: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #eff6ff 0%, #f1f5f9 40%, #f8fafc 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      line-height: 1.5;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background decoration */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 750px;
+      height: 450px;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12), transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top Branding / Badge */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    .pill-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .main-title {
+      font-family: 'Outfit', 'Inter', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.975rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Card Wrapper */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 36px 36px 40px;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(12px);
+    }
+
+    @media (max-width: 580px) {
+      .form-card {
+        padding: 24px 20px 28px;
+        border-radius: 16px;
+      }
+      .main-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Form Layout */
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 580px) {
+      .field-row {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    label .req {
+      color: var(--danger);
+      margin-left: 3px;
+    }
+
+    /* Form Controls */
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-main);
+      background-color: var(--surface-subtle);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    select:hover,
+    textarea:hover {
+      border-color: #cbd5e1;
+      background-color: #ffffff;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--border-focus);
+      background-color: #ffffff;
+      box-shadow: var(--shadow-input-focus);
+    }
+
+    /* Custom Select Arrow */
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 6px;
+      background-color: #64748b;
+      clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+      pointer-events: none;
+      transition: transform 0.2s ease;
+    }
+
+    .select-wrapper:focus-within::after {
+      transform: translateY(-50%) rotate(180deg);
+      background-color: var(--primary);
+    }
+
+    select {
+      cursor: pointer;
+      padding-right: 36px;
+    }
+
+    /* Responsive Course Level Selection */
+    .course-options-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .course-option-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 13px 8px;
+      background: var(--surface-subtle);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+      box-sizing: border-box;
+      margin: 0 !important;
+    }
+
+    .course-option-card:hover {
+      border-color: #cbd5e1;
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .course-option-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+    }
+
+    /* On Large screens: 3 clean boxes in a line, hide radio circle & long description */
+    .option-radio-indicator {
+      display: none;
+    }
+
+    .option-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .option-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .option-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+      transition: color 0.2s ease;
+    }
+
+    .option-badge {
+      display: none;
+    }
+
+    .option-subtitle {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 2px;
+      transition: color 0.2s ease;
+    }
+
+    .option-desc {
+      display: none;
+    }
+
+    .course-option-card.selected,
+    .course-option-card:has(input[type="radio"]:checked) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .course-option-card.selected .option-title,
+    .course-option-card:has(input[type="radio"]:checked) .option-title {
+      color: var(--primary);
+    }
+
+    .course-option-card.selected .option-subtitle,
+    .course-option-card:has(input[type="radio"]:checked) .option-subtitle {
+      color: var(--primary-hover);
+      font-weight: 600;
+    }
+
+    .course-option-card:focus-within {
+      box-shadow: var(--shadow-input-focus);
+    }
+
+    /* As boxes start to go below each other (small screens / mobile) */
+    @media (max-width: 580px) {
+      .course-options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .course-option-card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        gap: 14px;
+        padding: 13px 16px;
+        width: 100%;
+      }
+
+      .option-radio-indicator {
+        display: flex;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #cbd5e1;
+        background: #ffffff;
+        flex-shrink: 0;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+      }
+
+      .option-radio-indicator::after {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--primary);
+        transform: scale(0);
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .course-option-card input[type="radio"]:checked + .option-radio-indicator {
+        border-color: var(--primary);
+      }
+
+      .course-option-card input[type="radio"]:checked + .option-radio-indicator::after {
+        transform: scale(1);
+      }
+
+      .option-content {
+        flex: 1;
+        min-width: 0;
+        align-items: flex-start;
+      }
+
+      .option-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .option-title {
+        font-size: 0.95rem;
+      }
+
+      .option-badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: #e2e8f0;
+        color: #475569;
+        letter-spacing: 0.02em;
+        transition: var(--transition);
+      }
+
+      .course-option-card.selected .option-badge,
+      .course-option-card:has(input[type="radio"]:checked) .option-badge {
+        background: rgba(79, 70, 229, 0.15);
+        color: var(--primary-hover);
+      }
+
+      .option-subtitle {
+        display: none;
+      }
+
+      .option-desc {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        line-height: 1.35;
+      }
+    }
+
+    /* Textarea & Live Counter */
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.4;
+    }
+
+    .textarea-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 5px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .char-counter {
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .char-counter.warning {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .char-counter.danger {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    /* Validation Errors */
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 5px;
+      min-height: 16px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transform: translateY(-2px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .error-msg.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .has-error input[type="text"],
+    .has-error input[type="email"],
+    .has-error select,
+    .has-error textarea {
+      border-color: var(--danger) !important;
+      background-color: var(--danger-bg) !important;
+    }
+
+    .has-error input[type="text"]:focus,
+    .has-error input[type="email"]:focus,
+    .has-error select:focus,
+    .has-error textarea:focus {
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15) !important;
+    }
+
+    .has-error .course-option-card {
+      border-color: var(--danger-border);
+      background-color: var(--danger-bg);
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 14px var(--primary-glow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    .btn-submit:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    .btn-submit svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-submit:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* Form Footer Assurance */
+    .form-footer-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Thank You / Success State Card */
+    .thankyou-card {
+      display: none;
+      text-align: center;
+      padding: 16px 8px;
+      animation: fadeInScale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .thankyou-card.visible {
+      display: block;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      background: var(--success-bg);
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--success);
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.25);
+    }
+
+    .thankyou-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .thankyou-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    .submission-summary-box {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      text-align: left;
+      font-size: 0.85rem;
+      color: #334155;
+      margin-bottom: 24px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+
+    .summary-key {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .summary-val {
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: right;
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-reset:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    /* Visually hidden for assistive tech */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="brand-header">
+      <div class="pill-badge">
+        <span class="dot"></span>
+        <span>Admissions Advisory Portal</span>
+      </div>
+      <h1 class="main-title">Student Lead Application</h1>
+      <p class="subtitle">Connect with academic advisors and discover degree programs matching your aspirations.</p>
+    </header>
+
+    <!-- Main Card -->
+    <main class="form-card">
+      <!-- Capture Form -->
+      <form id="leadCaptureForm" novalidate>
+        <div class="form-grid">
+          
+          <!-- Row 1: Full Name & Email -->
+          <div class="field-row">
+            <!-- Full Name -->
+            <div class="form-group" id="group-fullName">
+              <label for="fullName">
+                <span>Full Name<span class="req">*</span></span>
+              </label>
+              <input 
+                type="text" 
+                id="fullName" 
+                name="fullName" 
+                placeholder="e.g. Maya Patel" 
+                autocomplete="name"
+                aria-required="true"
+                aria-describedby="fullNameError"
+              />
+              <div class="error-msg" id="fullNameError" role="alert"></div>
+            </div>
+
+            <!-- Email Address -->
+            <div class="form-group" id="group-email">
+              <label for="email">
+                <span>Email Address<span class="req">*</span></span>
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="e.g. maya@example.com" 
+                autocomplete="email"
+                aria-required="true"
+                aria-describedby="emailError"
+              />
+              <div class="error-msg" id="emailError" role="alert"></div>
+            </div>
+          </div>
+
+          <!-- Row 2: Country & Preferred University -->
+          <div class="field-row">
+            <!-- Country Dropdown -->
+            <div class="form-group" id="group-country">
+              <label for="country">
+                <span>Country of Residence<span class="req">*</span></span>
+              </label>
+              <div class="select-wrapper">
+                <select id="country" name="country" aria-required="true" aria-describedby="countryError">
+                  <option value="" disabled selected>Select your country</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Germany">Germany</option>
+                  <option value="India">India</option>
+                  <option value="Ireland">Ireland</option>
+                  <option value="Japan">Japan</option>
+                  <option value="Netherlands">Netherlands</option>
+                  <option value="New Zealand">New Zealand</option>
+                  <option value="Singapore">Singapore</option>
+                  <option value="United Arab Emirates">United Arab Emirates</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="United States">United States</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="error-msg" id="countryError" role="alert"></div>
+            </div>
+
+            <!-- Preferred University -->
+            <div class="form-group" id="group-preferredUniversity">
+              <label for="preferredUniversity">
+                <span>Preferred University<span class="req">*</span></span>
+              </label>
+              <input 
+                type="text" 
+                id="preferredUniversity" 
+                name="preferredUniversity" 
+                placeholder="e.g. University of Toronto" 
+                aria-required="true"
+                aria-describedby="preferredUniversityError"
+              />
+              <div class="error-msg" id="preferredUniversityError" role="alert"></div>
+            </div>
+          </div>
+
+          <!-- Course Level (Radio Group) -->
+          <div class="form-group" id="group-courseLevel">
+            <label id="courseLevelGroupLabel">
+              <span>Target Degree Level<span class="req">*</span></span>
+            </label>
+            <div class="course-options-list" role="radiogroup" aria-labelledby="courseLevelGroupLabel" aria-describedby="courseLevelError">
+              <label class="course-option-card">
+                <input type="radio" name="courseLevel" value="Undergraduate (UG)" />
+                <span class="option-radio-indicator" aria-hidden="true"></span>
+                <div class="option-content">
+                  <div class="option-header">
+                    <span class="option-title">Undergraduate</span>
+                    <span class="option-badge">UG</span>
+                  </div>
+                  <span class="option-subtitle">UG / Bachelor's</span>
+                  <span class="option-desc">Bachelor's degrees & foundational undergraduate programs</span>
+                </div>
+              </label>
+
+              <label class="course-option-card">
+                <input type="radio" name="courseLevel" value="Postgraduate (PG)" />
+                <span class="option-radio-indicator" aria-hidden="true"></span>
+                <div class="option-content">
+                  <div class="option-header">
+                    <span class="option-title">Postgraduate</span>
+                    <span class="option-badge">PG</span>
+                  </div>
+                  <span class="option-subtitle">PG / Master's</span>
+                  <span class="option-desc">Master's degrees, postgraduate diplomas & specialized tracks</span>
+                </div>
+              </label>
+
+              <label class="course-option-card">
+                <input type="radio" name="courseLevel" value="Doctorate (PhD)" />
+                <span class="option-radio-indicator" aria-hidden="true"></span>
+                <div class="option-content">
+                  <div class="option-header">
+                    <span class="option-title">Doctorate</span>
+                    <span class="option-badge">PhD</span>
+                  </div>
+                  <span class="option-subtitle">PhD / Research</span>
+                  <span class="option-desc">Doctor of Philosophy, academic research & doctoral fellowships</span>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg" id="courseLevelError" role="alert"></div>
+          </div>
+
+          <!-- Message with 300-char Live Counter -->
+          <div class="form-group" id="group-message">
+            <label for="message">
+              <span>Personal Statement or Inquiry<span class="req">*</span></span>
+            </label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="4" 
+              maxlength="300"
+              placeholder="Briefly outline your academic interests, background, and specific questions..." 
+              aria-required="true"
+              aria-describedby="messageError charCounter"
+            ></textarea>
+            <div class="textarea-footer">
+              <span id="charCounter" class="char-counter" aria-live="polite">300 characters remaining</span>
+            </div>
+            <div class="error-msg" id="messageError" role="alert"></div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submitBtn" class="btn-submit">
+            <span>Submit Application</span>
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="form-footer-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Your information is safely handled for admissions advisory only.</span>
+          </div>
+
+        </div>
+      </form>
+
+      <!-- Thank-You Card (Shown without page reload) -->
+      <section id="thankYouCard" class="thankyou-card" aria-live="polite">
+        <div class="success-icon-wrapper">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2 class="thankyou-title" id="thankYouHeading">Application Submitted!</h2>
+        <p class="thankyou-desc" id="thankYouMessage">
+          Thank you for registering your interest. An admissions counselor will review your profile and reach out within 24–48 hours.
+        </p>
+
+        <!-- Summary of submitted info -->
+        <div class="submission-summary-box">
+          <div class="summary-item">
+            <span class="summary-key">Candidate</span>
+            <span class="summary-val" id="sumFullName">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Email</span>
+            <span class="summary-val" id="sumEmail">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Country</span>
+            <span class="summary-val" id="sumCountry">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Degree Level</span>
+            <span class="summary-val" id="sumCourseLevel">-</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-key">Target University</span>
+            <span class="summary-val" id="sumUniversity">-</span>
+          </div>
+        </div>
+
+        <button type="button" id="resetBtn" class="btn-reset">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Submit Another Application</span>
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // DOM Elements
+      const form = document.getElementById('leadCaptureForm');
+      const thankYouCard = document.getElementById('thankYouCard');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const fullNameInput = document.getElementById('fullName');
+      const emailInput = document.getElementById('email');
+      const countrySelect = document.getElementById('country');
+      const universityInput = document.getElementById('preferredUniversity');
+      const messageTextarea = document.getElementById('message');
+      const charCounter = document.getElementById('charCounter');
+      const MAX_MESSAGE_LENGTH = 300;
+
+      // Thank you summary elements
+      const thankYouHeading = document.getElementById('thankYouHeading');
+      const sumFullName = document.getElementById('sumFullName');
+      const sumEmail = document.getElementById('sumEmail');
+      const sumCountry = document.getElementById('sumCountry');
+      const sumCourseLevel = document.getElementById('sumCourseLevel');
+      const sumUniversity = document.getElementById('sumUniversity');
+
+      // Email regex (RFC 5322 simplified pattern)
+      const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+      // Error helper functions
+      function showError(fieldId, message) {
+        const group = document.getElementById('group-' + fieldId);
+        const errorEl = document.getElementById(fieldId + 'Error');
+        if (group) group.classList.add('has-error');
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.add('visible');
+        }
+        const input = document.getElementById(fieldId);
+        if (input) input.setAttribute('aria-invalid', 'true');
+      }
+
+      function clearError(fieldId) {
+        const group = document.getElementById('group-' + fieldId);
+        const errorEl = document.getElementById(fieldId + 'Error');
+        if (group) group.classList.remove('has-error');
+        if (errorEl) {
+          errorEl.textContent = '';
+          errorEl.classList.remove('visible');
+        }
+        const input = document.getElementById(fieldId);
+        if (input) input.removeAttribute('aria-invalid');
+      }
+
+      function clearAllErrors() {
+        ['fullName', 'email', 'country', 'preferredUniversity', 'courseLevel', 'message'].forEach(clearError);
+      }
+
+      // Live 300-character counter logic
+      function updateCharCounter() {
+        const currentLength = messageTextarea.value.length;
+        const remaining = MAX_MESSAGE_LENGTH - currentLength;
+
+        charCounter.textContent = `${remaining} character${remaining === 1 ? '' : 's'} remaining`;
+
+        charCounter.classList.remove('warning', 'danger');
+        if (remaining <= 0) {
+          charCounter.classList.add('danger');
+        } else if (remaining <= 40) {
+          charCounter.classList.add('warning');
+        }
+      }
+
+      messageTextarea.addEventListener('input', function () {
+        updateCharCounter();
+        if (messageTextarea.value.trim().length > 0) {
+          clearError('message');
+        }
+      });
+
+      // Real-time error clearing on input
+      fullNameInput.addEventListener('input', () => {
+        if (fullNameInput.value.trim().length >= 2) clearError('fullName');
+      });
+
+      emailInput.addEventListener('input', () => {
+        if (EMAIL_REGEX.test(emailInput.value.trim())) clearError('email');
+      });
+
+      countrySelect.addEventListener('change', () => {
+        if (countrySelect.value) clearError('country');
+      });
+
+      universityInput.addEventListener('input', () => {
+        if (universityInput.value.trim().length >= 2) clearError('preferredUniversity');
+      });
+
+      const courseRadios = document.querySelectorAll('input[name="courseLevel"]');
+      function updateCourseSelectionUI() {
+        document.querySelectorAll('.course-option-card').forEach(card => {
+          const radio = card.querySelector('input[type="radio"]');
+          if (radio && radio.checked) {
+            card.classList.add('selected');
+          } else {
+            card.classList.remove('selected');
+          }
+        });
+      }
+
+      courseRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          clearError('courseLevel');
+          updateCourseSelectionUI();
+        });
+      });
+
+      // Validation logic
+      function validateForm() {
+        clearAllErrors();
+        let isValid = true;
+        let firstInvalidField = null;
+
+        // 1. Full Name validation
+        const nameVal = fullNameInput.value.trim();
+        if (!nameVal) {
+          showError('fullName', 'Please enter your full name.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = fullNameInput;
+        } else if (nameVal.length < 2) {
+          showError('fullName', 'Full name must be at least 2 characters long.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = fullNameInput;
+        } else if (!/^[a-zA-Z\s.'-]+$/.test(nameVal)) {
+          showError('fullName', 'Name can only contain letters, spaces, hyphens, and apostrophes.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = fullNameInput;
+        }
+
+        // 2. Email validation
+        const emailVal = emailInput.value.trim();
+        if (!emailVal) {
+          showError('email', 'Please enter your email address.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = emailInput;
+        } else if (!EMAIL_REGEX.test(emailVal)) {
+          showError('email', 'Please enter a valid email address (e.g. name@domain.com).');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = emailInput;
+        }
+
+        // 3. Country validation
+        const countryVal = countrySelect.value;
+        if (!countryVal) {
+          showError('country', 'Please select your country of residence.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = countrySelect;
+        }
+
+        // 4. Preferred University validation
+        const universityVal = universityInput.value.trim();
+        if (!universityVal) {
+          showError('preferredUniversity', 'Please specify your preferred university.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = universityInput;
+        } else if (universityVal.length < 2) {
+          showError('preferredUniversity', 'University name must be at least 2 characters long.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = universityInput;
+        }
+
+        // 5. Course Level validation
+        const selectedRadio = document.querySelector('input[name="courseLevel"]:checked');
+        if (!selectedRadio) {
+          showError('courseLevel', 'Please select your target course level.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = courseRadios[0];
+        }
+
+        // 6. Message validation
+        const messageVal = messageTextarea.value.trim();
+        if (!messageVal) {
+          showError('message', 'Please enter a brief personal statement or inquiry.');
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = messageTextarea;
+        } else if (messageVal.length > MAX_MESSAGE_LENGTH) {
+          showError('message', `Message exceeds the ${MAX_MESSAGE_LENGTH}-character limit.`);
+          isValid = false;
+          if (!firstInvalidField) firstInvalidField = messageTextarea;
+        }
+
+        if (firstInvalidField) {
+          firstInvalidField.focus();
+        }
+
+        return isValid;
+      }
+
+      // Form Submit Handler
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!validateForm()) {
+          return;
+        }
+
+        const selectedRadio = document.querySelector('input[name="courseLevel"]:checked');
+
+        // Extract lead data payload
+        const leadPayload = {
+          fullName: fullNameInput.value.trim(),
+          email: emailInput.value.trim(),
+          country: countrySelect.value,
+          preferredUniversity: universityInput.value.trim(),
+          courseLevel: selectedRadio ? selectedRadio.value : '',
+          message: messageTextarea.value.trim(),
+          submittedAt: new Date().toISOString()
+        };
+
+        // Log formatted JSON to browser console as required
+        console.group('%c🎓 Student Lead Captured Successfully', 'color: #4f46e5; font-size: 14px; font-weight: bold;');
+        console.log('Submission Timestamp:', leadPayload.submittedAt);
+        console.log('JSON Payload:', JSON.stringify(leadPayload, null, 2));
+        console.dir(leadPayload);
+        console.groupEnd();
+
+        // Update Thank-You card summary
+        thankYouHeading.textContent = `Thank you, ${leadPayload.fullName.split(' ')[0]}!`;
+        sumFullName.textContent = leadPayload.fullName;
+        sumEmail.textContent = leadPayload.email;
+        sumCountry.textContent = leadPayload.country;
+        sumCourseLevel.textContent = leadPayload.courseLevel;
+        sumUniversity.textContent = leadPayload.preferredUniversity;
+
+        // Transition views smoothly without page reload
+        form.style.display = 'none';
+        thankYouCard.classList.add('visible');
+        thankYouCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      // Reset / Submit Another response
+      resetBtn.addEventListener('click', function () {
+        form.reset();
+        clearAllErrors();
+        updateCharCounter();
+        updateCourseSelectionUI();
+        thankYouCard.classList.remove('visible');
+        form.style.display = 'block';
+        fullNameInput.focus();
+      });
+
+      // Initialize counter on load
+      updateCharCounter();
+
+    })();
+  </script>
+</body>
+</html>
